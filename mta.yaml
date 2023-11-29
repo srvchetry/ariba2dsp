@@ -1,0 +1,80 @@
+_schema-version: '3.1'
+ID: ariba2dsp
+version: 1.0.0
+description: "Bring SAP Ariba Data into SAP DSP using the underlying HANA Cloud of DSP."
+
+#--------------------------------------------#
+#--------service module----------------------#
+
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm install --production
+        - npx cds build --production
+
+modules:
+- name: ariba2dsp-srv
+  type: nodejs
+  path: gen/srv
+  
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm
+  
+  provides:
+    - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      properties:
+        srv-url: ${default-url}
+  
+  requires:
+    - name: ariba2dsp-db
+    - name: cross-container-service-1
+
+#--------------------------------------------#
+#-----------db module------------------------#
+
+- name: ariba2dsp-db-deployer
+  type: hdb
+  path: db
+  parameters:
+    buildpack: nodejs_buildpack
+
+  requires:
+    - name: ariba2dsp-db
+      properties:
+        TARGET_CONTAINER: ~{hdi-service-name}
+
+    - name: cross-container-service-1
+      group: SERVICE_REPLACEMENTS
+      properties:
+        key: ServiceName_1
+        service: ~{the-service-name}
+
+#--------------------------------------------#
+#-----------resoures for the modules---------#
+resources:
+- name: ariba2dsp-db
+  type: com.sap.xs.hdi-container
+  
+  parameters:
+    config:
+      database_id: 9ee99a70-9d98-481d-ab94-00b0417b66c5
+      schema: ARIBA_DSP # this is the new HDI cross container that gets created in the BTP space, also available in DSP for consumption.
+    service: hana
+    service-plan: hdi-shared
+  
+  properties:
+    hdi-service-name: ${service-name}
+
+- name: cross-container-service-1
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: UPS_aribainteg
+  properties:
+    the-service-name: ${service-name}
+
