@@ -1,7 +1,7 @@
 _schema-version: '3.1'
 ID: ariba2dsp
 version: 1.0.0
-description: "Bring SAP Ariba Data into SAP DSP using the underlying HANA Cloud of DSP."
+description: "Bring SAP Ariba Data into SAP DSP using HANA Cloud underneath DSP."
 
 #--------------------------------------------#
 #--------service module----------------------#
