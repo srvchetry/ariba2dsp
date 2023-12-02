@@ -58,13 +58,13 @@ modules:
 #--------------------------------------------#
 #-----------resoures for the modules---------#
 resources:
-- name: ariba2dsp-db
+- name: ariba2dsp-db            # this is the new HDI cross container that gets created in the BTP space, also available in DSP for consumption.
   type: com.sap.xs.hdi-container
   
   parameters:
     config:
       database_id: 9ee99a70-9d98-481d-ab94-00b0417b66c5
-      schema: ARIBA_DSP # this is the new HDI cross container that gets created in the BTP space, also available in DSP for consumption.
+      schema: ARIBA_DSP         # this is the schema in the HC underneath DSP.
     service: hana
     service-plan: hdi-shared
   
