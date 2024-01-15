@@ -13,8 +13,8 @@ build-parameters:
   before-all:
     - builder: custom
       commands:
-        - npm install --production
-        - npx cds build --production
+        - cds build
+        
 
 modules:
 - name: ariba2dsp-srv
@@ -30,6 +30,7 @@ modules:
     - name: srv-api # required by consumers of CAP services (e.g. approuter)
       properties:
         srv-url: ${default-url}
+        authentication-method: none
   
   requires:
     - name: ariba2dsp-db
@@ -40,7 +41,7 @@ modules:
 
 - name: ariba2dsp-db-deployer
   type: hdb
-  path: db
+  path: gen/db
   parameters:
     buildpack: nodejs_buildpack
 
@@ -64,7 +65,7 @@ resources:
   parameters:
     config:
       database_id: 9ee99a70-9d98-481d-ab94-00b0417b66c5
-      schema: ARIBA_DSP         # this is the schema in the HC underneath DSP.
+      schema: ARIBA_DSP        # this is the schema in the HC underneath DSP.
     service: hana
     service-plan: hdi-shared
   
