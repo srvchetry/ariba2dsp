@@ -4,22 +4,17 @@ This repo is about using the underlying HANA Cloud of SAP Datasphere for integra
 
 It contains these folders and files, following our recommended project layout:
 
-File or Folder | Purpose
----------|----------
-`app/` | content for UI frontends goes here
-`db/` | your domain models and data go here
-`srv/` | your service models and code go here
-`package.json` | project metadata and configuration
-`readme.md` | this getting started guide
+# Configuration
+Open Terminal in Business Application Studio and run npm i
 
+# Build
+Open Terminal and run cds build
 
-## Next Steps
+# Deploy for local testing
 
-- Open a new terminal and run `cds watch` 
-- (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
-- Start adding content, for example, a [db/schema.cds](db/schema.cds).
+Open Terminal and run cds deploy, followed by cds watch --profile hybrid
 
+# Deploy as an application in BTP
 
-## Learn More
-
-Learn more at https://cap.cloud.sap/docs/get-started/.
+Open Terminal and create a .mtar file by running mbt build.
+Right click on the mtar file and choose "Deploy MTA Archive" alternatively run command cf deploy <path-to-mtar-file>
